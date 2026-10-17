@@ -74,8 +74,57 @@ def update():
         con.commit()
         break
 
+def delete():
+    show()
+    while True:
+        key = int(input("Enter the ID you want to delete: "))
+
+        c.execute("SELECT 1 FROM buyers WHERE rowid = ?",(key,))
+
+        if c.fetchone is None:
+            print(" !!! INVALID ID! TRY AGAIN !!!")
+            continue
+
+        c.execute("SELECT rowid, * FROM buyers WHERE rowid = ?",(key,))
+        print("The data to be deleted: \n")
+        print(f"\t{'ID':5}{'First Name':15} {'Last Name':17} {'|':5}  {'Number':15} {'Email':20}")
+        print("   ", "-" * 90)
+        items = c.fetchone()
+        print(f"\t{str(items[0]):5} {items[1]:15}  {items[2]:15} {'|':5} {items[3]:15} {items[4]:20}")
+        print()
+        sure = input("Are You Sure? [y/N]").lower()
+        match sure:
+            case 'y':
+                c.execute("DELETE FROM buyers WHERE rowid = ?", (key,))
+                print("\n Data has been deleted!")
+            case 'n':
+                print("\n Data not deleted.")
+                break
+            case _:
+                print(" \n !!! INVALID! TRY AGAIN !!!")
+                continue
+        again = input("\n Delete Another Data?[Y,n]: ").lower()
+        if again == 'y':
+            continue
+        elif again == 'n':
+            break
+        else:
+            print("\n Invalid! Try Again from start. ")
+
+def order():
+    c.execute("SELECT rowid, * FROM Buyers ORDER BY rowid DESC")
+    data = c.fetchall()
+    print(f"\t{'ID':5}{'First Name':15} {'Last Name':17} {'|':5}  {'Number':15} {'Email':20}")
+    print("   ", "-" * 90)
+    for item in data:
+        print(f"\t{str(item[0]):5} {item[1]:15}  {item[2]:15} {'|':5} {item[3]:15} {item[4]:20}")
+    print()
+
+
+
+
 while True:
-    value = int(input("\n 1. Input Data \n 2. Show Data \n 3. Update Existing Data \n -> "))
+    value = int(input("\n 1. Input Data \n 2. Show Data \n 3. Update Existing Data \n 4. Delete Data \n 5. View Data in Order \n -> "))
     match value:
         case 1:
             add_data()
@@ -83,9 +132,14 @@ while True:
             show()
         case 3:
             update()
+        case 4:
+            delete()
+        case 5:
+            order()
 
         case _:
             Print("Invalid! Try Again")
+            continue
 
     print()
     ans = input(" -> Do You Want To Continue? [Y,n]: ")

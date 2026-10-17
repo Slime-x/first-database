@@ -21,12 +21,12 @@ def data_in():
     c.execute(" INSERT INTO buyers VALUES(?,?,?,?)",(fn,ln,no,email))
 
 def show():
-    c.execute("SELECT * FROM buyers ")
+    c.execute("SELECT *, rowid FROM buyers ")
     data = c.fetchall()
-    print(f"{'First Name':15} {'Last Name':15} {'Number':15} {'Email':15}")
-    print("-" * 70)
+    print(f"\t{'First Name':15} {'Last Name':15} {'Number':15} {'Email':15}")
+    print("\t--" + "-" * 70)
     for item in data:
-        print(f"{item[0]:15} {item[1]:15} {item[2]:15} {item[3]:15}")
+        print(f"\t{item[0]:15} {item[1]:10} {'|':5} {item[2]:15} | {item[3]:20} {item[4]:15}")
 
 
 
@@ -40,10 +40,11 @@ while True:
     else:
         print("Ran wrong!!")
 
-    ans = input("Do You Want To Continue? [Y,n]")
+    print()
+    ans = input("\t -> Do You Want To Continue? [Y,n]: ")
     while ans != 'y' and ans != 'Y' and ans != 'n' and ans != 'N':
-        print("ERROR: Invalid Character. Try again!")
-        ans = input("Do You Want To Continue? [Y,n]")
+        print("\t ERROR: Invalid Character. Try again!")
+        ans = input("\t -> Do You Want To Continue? [Y,n]: ")
 
     if ans == 'N' or ans == 'n':
         break

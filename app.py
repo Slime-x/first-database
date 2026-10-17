@@ -5,9 +5,6 @@ con = sqlite3.connect('customer.db')
 c = con.cursor()
 
 
-def remove():
-    c.execute("SELECT rowid FROM buyers")
-    key = input("Enter which data you want to delete: ")
 
 
 def add_data():
@@ -97,6 +94,7 @@ def delete():
             case 'y':
                 c.execute("DELETE FROM buyers WHERE rowid = ?", (key,))
                 print("\n Data has been deleted!")
+                con.commit()
             case 'n':
                 print("\n Data not deleted.")
                 break
@@ -112,19 +110,50 @@ def delete():
             print("\n Invalid! Try Again from start. ")
 
 def order():
-    c.execute("SELECT rowid, * FROM Buyers ORDER BY rowid DESC")
-    data = c.fetchall()
-    print(f"\t{'ID':5}{'First Name':15} {'Last Name':17} {'|':5}  {'Number':15} {'Email':20}")
-    print("   ", "-" * 90)
-    for item in data:
-        print(f"\t{str(item[0]):5} {item[1]:15}  {item[2]:15} {'|':5} {item[3]:15} {item[4]:20}")
-    print()
+    while True: 
+        print("What do you want to order by?")
+        value = int(input("1. Row ID \n 2. First Name \n 3. Last Name \n -> "))
+        way = int(input("\nOrder:\n 1. Ascending \n 2. Descending"))
+        if (value < 1 and value > 3) or (way < 1 or way > 2):
+            print("INVALID! Try Again!")
+            continue
+        print()
+        match value:
+            case 1:
+                match way:
+                    case 1: 
+                        c.execute("SELECT rowid,* FROM Buyers ORDER BY rowid ASC")
+                    case 2:
+                        c.execute("SELECT rowid,* FROM Buyers ORDER BY rowid DESC")
+
+            case 2:
+                match way:
+                    case 1: 
+                        c.execute("SELECT rowid,* FROM Buyers ORDER BY first_name ASC")
+                    case 2:
+                        c.execute("SELECT rowid,* FROM Buyers ORDER BY first_name DESC")
+
+            case 3:
+                match way:
+                    case 1: 
+                        c.execute("SELECT rowid,* FROM Buyers ORDER BY last_name ASC")
+                    case 2:
+                        c.execute("SELECT rowid,* FROM Buyers ORDER BY last_name DESC")
+
+
+        data = c.fetchall()
+        print(f"\t{'ID':5}{'First Name':15} {'Last Name':17} {'|':5}  {'Number':15} {'Email':20}")
+        print("   ", "-" * 90)
+        for item in data:
+            print(f"\t{str(item[0]):5} {item[1]:15}  {item[2]:15} {'|':5} {item[3]:15} {item[4]:20}")
+        print()
+        break
 
 
 
 
 while True:
-    value = int(input("\n 1. Input Data \n 2. Show Data \n 3. Update Existing Data \n 4. Delete Data \n 5. View Data in Order \n -> "))
+    value = int(input("\n 1. Input Data \n 2. Show Data \n 3. Update Existing Data \n 4. Delete Data \n 5. View Data in Order \n 0. Cancle \n -> "))
     match value:
         case 1:
             add_data()
@@ -136,9 +165,11 @@ while True:
             delete()
         case 5:
             order()
+        case 0:
+            break
 
         case _:
-            Print("Invalid! Try Again")
+            print("Invalid! Try Again")
             continue
 
     print()
@@ -150,21 +181,6 @@ while True:
     if ans == 'N' or ans == 'n':
         break
     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 con.commit()

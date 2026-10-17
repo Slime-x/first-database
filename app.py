@@ -10,7 +10,7 @@ def remove():
     key = input("Enter which data you want to delete: ")
 
 
-def data_in():
+def add_data():
     fn = input("Enter first name: ")
     ln = input("Enter last name: ")
     no = input("Enter phone no: ")
@@ -32,22 +32,61 @@ def show():
     print("\t--" + "-" * 70)
     for item in data:
         print(f"\t{str(item[0]):5} {item[1]:15}  {item[2]:15} {'|':5} {item[3]:15} {item[4]:20}")
+    print()
 
 def update():
     show()
     c.execute(" Select rowid FROM buyers")
-    key = int(input("Enter ID of the user you want to update:"))
-    print()
-    what = input("What do you want to change? \n 1. First Name \n 2. Last Name \n 3. Phone No \n 4. Email \n -> ")
+    while True:
+        key = int(input("Enter ID of the user you want to update:"))
+        c.execute("SELECT 1 FROM buyers WHERE rowid = ?", key)
+
+        if fetchone() is None:
+            print(" Invalid Key! Try Again \n")
+            continue
+
+        print()
+        what = int(input("What do you want to change? \n 1. First Name \n 2. Last Name \n 3. Phone No \n 4. Email \n -> "))
+        if what < 1 or what > 4:
+            print("Invalid choice! Try Again \n")
+            continue
+        
+        match what:
+            case 1:
+                change_first_name = input("Enter New First Name: ")
+                c.execute("""UPDATE buyers 
+                            SET first_name = ?
+                            WHERE rowid = ?
+                        """, (change_first_name, key))
+                break
+            case 2:
+                change_last_name = input("Enter New Last Name: ")
+                c.execute("UPDATE buyers SET last_name = ? WHERE rowid = ?", (change_last_name, key))
+            case 3:
+                change_phone = input("Enter New Phone NO: ")
+                c.execute("UPDATE buyers SET phone_no = ? WHERE rowid = ?", (change_phone, key))
+            case 4:
+                change_email = input("Enter NEW Email: ")
+                c.execute("UPDATE buyers SET email = ? WHERE rowid = ?", (change_email, key))
+            case _:
+                print("Invalid! Try again")
+                print("-" * 90)
+                continue
+    con.commit()
+    break
 
 while True:
-    value = int(input(" 1. Input Data \n 2. Show Data \n -> "))
-    if value == 1:
-        data_in()
-    elif value == 2:
-        show()
-    else:
-        print("Ran wrong!!")
+    value = int(input(" 1. Input Data \n 2. Show Data \n 3. Update Existing Data \n -> "))
+    match value:
+        case 1:
+            add_data()
+        case 2:
+            show()
+        case 3:
+            update()
+
+        case _:
+            Print("Invalid! Try Again")
 
     print()
     ans = input("\t -> Do You Want To Continue? [Y,n]: ")

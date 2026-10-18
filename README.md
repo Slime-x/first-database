@@ -29,7 +29,8 @@ Download the appropriate Executable for your OS from the Github release seen in 
 ```
 <br>
 <b> Windows </b> Open the terminal in the directory,
-`.\myapp.exe    `
+
+`.\myapp.exe  `
 
 # Requirements
 <ul> 

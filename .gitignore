@@ -1,0 +1,23 @@
+# Python environments
+.venv/
+venv/
+
+# Python-generated files
+__pycache__/
+*.py[cod]
+
+# PyInstaller output
+build/
+dist/
+*.spec
+
+# Local SQLite databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Local secrets
+.env
+
+
+----> Used AI here

@@ -60,11 +60,24 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: release-assets
-          merge-multiple: false
+
+      - name: Show downloaded files
+        run: find release-assets -type f -print
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
-          generate_release_notes: true
-          files: release-assets/**/*
+          generate_release_notes: false
+          body: |
+            ## Downloads
+
+            - **Linux:** `myapp-linux-x86_64`
+            - **Windows:** `myapp-windows-x86_64.exe`
+            - **macOS:** `myapp-macos`
+
+            Download the executable for your operating system.
+          files: |
+            release-assets/myapp-linux-x86_64/*
+            release-assets/myapp-windows-x86_64/*
+            release-assets/myapp-macos/*

@@ -15,8 +15,7 @@ Uhh.. There are features to:<br>
     <li> Modify Data</li>
     <li> Delete Data</li>
     <li> View Data in particular order</li>
-</ul> <br> some other features too
-<br>
+</ul>
 
 # How to install:
 
